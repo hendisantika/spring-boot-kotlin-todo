@@ -15,4 +15,9 @@ public final class LambdaExceptionUtil {
     public interface Consumer_WithExceptions<T, E extends Exception> {
         void accept(T t) throws E;
     }
+
+    @FunctionalInterface
+    public interface Function_WithExceptions<T, R, E extends Exception> {
+        R apply(T t) throws E;
+    }
 }
