@@ -4,6 +4,7 @@ import id.my.hendisantika.springbootkotlintodo.model.Todo;
 import id.my.hendisantika.springbootkotlintodo.repository.TodoRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * Created by IntelliJ IDEA.
@@ -49,4 +52,11 @@ public class TodoController {
         todoRepository.save(todo);
         return "redirect:/";
     }
+
+    @RequestMapping(value = "/todos", method = RequestMethod.POST)
+    public String createTodo(@Valid TodoDto todoDto) {
+        todoRepository.save(todoDto.toTodo());
+        return "redirect:/";
+    }
+
 }
