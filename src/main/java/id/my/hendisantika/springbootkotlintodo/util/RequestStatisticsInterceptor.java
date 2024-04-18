@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Created by IntelliJ IDEA.
@@ -29,5 +30,13 @@ public class RequestStatisticsInterceptor implements AsyncHandlerInterceptor {
         time.set(System.currentTimeMillis());
         statisticsInterceptor.startCounter();
         return true;
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        Long queryCount = statisticsInterceptor.getQueryCount();
+        if (modelAndView != null) {
+            modelAndView.addObject("_queryCount", queryCount);
+        }
     }
 }
