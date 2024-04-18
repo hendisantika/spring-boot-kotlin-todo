@@ -1,5 +1,6 @@
 package id.my.hendisantika.springbootkotlintodo.controller;
 
+import id.my.hendisantika.springbootkotlintodo.model.Todo;
 import id.my.hendisantika.springbootkotlintodo.repository.TodoRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -42,4 +43,10 @@ public class TodoController {
         return "redirect:/";
     }
 
+    @GetMapping(value = "/todos/{id}/completed")
+    public String deleteTodo(@PathVariable("id") Todo todo) {
+        todo.setCompleted(true);
+        todoRepository.save(todo);
+        return "redirect:/";
+    }
 }
