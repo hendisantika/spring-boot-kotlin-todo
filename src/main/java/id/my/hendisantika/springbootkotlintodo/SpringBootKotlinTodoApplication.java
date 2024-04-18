@@ -1,7 +1,15 @@
 package id.my.hendisantika.springbootkotlintodo;
 
+import org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+
+import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,5 +25,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SpringBootKotlinTodoApplication {
     public static void main(String[] args) {
         SpringApplication.run(SpringBootKotlinTodoApplication.class);
+    }
+
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(
+            EntityManagerFactoryBuilder factory, DataSource dataSource,
+            JpaProperties properties) {
+        Map<String, Object> jpaProperties = new HashMap<>();
+        jpaProperties.putAll(properties.getHibernateProperties(dataSource));
+        jpaProperties.put("hibernate.ejb.interceptor", hibernateInterceptor());
+        return factory.dataSource(dataSource).packages("io.github.knes1.todo.model")
+                .properties(jpaProperties).build();
     }
 }
