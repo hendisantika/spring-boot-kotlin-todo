@@ -1,9 +1,12 @@
 package id.my.hendisantika.springbootkotlintodo.util;
 
+import id.my.hendisantika.springbootkotlintodo.model.Todo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.Date;
 
 /**
  * Created by IntelliJ IDEA.
@@ -26,5 +29,17 @@ public class TodoGenerator {
             "my neighbors", "my coworkers", "some random people", "feeling of great joy"};
 
     private TodoGenerator() {
+    }
+
+    public static Todo randomTodo() {
+        String task = String.join(" ",
+                how[(int) (Math.random() * how.length)],
+                what[(int) (Math.random() * what.length)], "with",
+                with[(int) (Math.random() * with.length)]);
+
+        Todo todo = new Todo(task);
+        todo.setDateCreated(Date.from(Instant.now().plusSeconds((int) (Math.random() * 3600 * 24 * 365 * 2))));
+        todo.setCompleted(false);
+        return todo;
     }
 }
