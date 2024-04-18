@@ -23,4 +23,9 @@ public class HibernateStatisticsInterceptor extends EmptyInterceptor {
     public void startCounter() {
         queryCount.set(0L);
     }
+
+    public Long getQueryCount() {
+        return queryCount.get();
+    }
+
 }
