@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
@@ -37,9 +38,9 @@ public class SpringBootKotlinTodoApplication {
             EntityManagerFactoryBuilder factory, DataSource dataSource,
             JpaProperties properties) {
         Map<String, Object> jpaProperties = new HashMap<>();
-        jpaProperties.putAll(properties.getHibernateProperties(dataSource));
+//        jpaProperties.putAll(properties.getHibernateProperties(dataSource));
         jpaProperties.put("hibernate.ejb.interceptor", hibernateInterceptor());
-        return factory.dataSource(dataSource).packages("io.github.knes1.todo.model")
+        return factory.dataSource(dataSource).packages("id.my.hendisantika.springbootkotlintodo.model")
                 .properties(jpaProperties).build();
     }
 
@@ -49,7 +50,7 @@ public class SpringBootKotlinTodoApplication {
     }
 
     @Configuration
-    public static class WebApplicationConfig extends WebMvcConfigurerAdapter {
+    public static class WebApplicationConfig implements WebMvcConfigurer {
 
         @Autowired
         private RequestStatisticsInterceptor requestStatisticsInterceptor;

@@ -1,6 +1,6 @@
 package id.my.hendisantika.springbootkotlintodo.util;
 
-import org.hibernate.EmptyInterceptor;
+import org.hibernate.resource.jdbc.spi.StatementInspector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +14,8 @@ import org.slf4j.LoggerFactory;
  * Time: 07:08
  * To change this template use File | Settings | File Templates.
  */
-public class HibernateStatisticsInterceptor extends EmptyInterceptor {
+//public class HibernateStatisticsInterceptor extends EmptyInterceptor {
+public class HibernateStatisticsInterceptor implements StatementInspector {
 
     private static final Logger log = LoggerFactory.getLogger(HibernateStatisticsInterceptor.class);
 
@@ -33,12 +34,14 @@ public class HibernateStatisticsInterceptor extends EmptyInterceptor {
     }
 
     @Override
-    public String onPrepareStatement(String sql) {
+//    public String onPrepareStatement(String sql) {
+    public String inspect(String sql) {
         Long count = queryCount.get();
         if (count != null) {
             queryCount.set(count + 1);
         }
         //log.info(sql);
-        return super.onPrepareStatement(sql);
+//        return super.onPrepareStatement(sql);
+        return sql;
     }
 }
