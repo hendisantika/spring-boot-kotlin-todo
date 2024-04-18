@@ -50,4 +50,9 @@ public final class LambdaExceptionUtil {
             }
         };
     }
+
+    @SuppressWarnings("unchecked")
+    private static <E extends Exception> void throwActualException(Exception exception) throws E {
+        throw (E) exception;
+    }
 }
