@@ -11,4 +11,8 @@ package id.my.hendisantika.springbootkotlintodo.util;
  * To change this template use File | Settings | File Templates.
  */
 public final class LambdaExceptionUtil {
+    @FunctionalInterface
+    public interface Consumer_WithExceptions<T, E extends Exception> {
+        void accept(T t) throws E;
+    }
 }
