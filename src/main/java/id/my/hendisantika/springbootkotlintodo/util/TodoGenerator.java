@@ -75,4 +75,13 @@ public class TodoGenerator {
         }
     }
 
+    /*
+	public static void main(String[] args) {
+		try(FileOutputStream fout = new FileOutputStream("/tmp/script.sql")) {
+			createRandomTodoInserts(fout, 1_000_000);
+		} catch (IOException e) {
+			log.debug("Exception occurred " + e.getMessage(), e);
+		}
+
+	}*/
 }
