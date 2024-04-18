@@ -39,4 +39,13 @@ public class RequestStatisticsInterceptor implements AsyncHandlerInterceptor {
             modelAndView.addObject("_queryCount", queryCount);
         }
     }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        long duration = System.currentTimeMillis() - time.get();
+        Long queryCount = statisticsInterceptor.getQueryCount();
+        statisticsInterceptor.clearCounter();
+        time.remove();
+        log.info("[Time: {} ms] [Queries: {}] {} {}", duration, queryCount, request.getMethod(), request.getRequestURI());
+    }
 }
