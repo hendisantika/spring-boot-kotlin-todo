@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -86,4 +87,37 @@ public class TodoController {
             throw new RuntimeException("Exception occurred while exporting results", e);
         }
     }
+
+    @GetMapping(value = "/todos2.csv")
+    public void exportTodosCSVSlicing(HttpServletResponse response) {
+        final int PAGE_SIZE = 1000;
+        response.addHeader("Content-Type", "application/csv");
+        response.addHeader("Content-Disposition", "attachment; filename=todos.csv");
+        response.setCharacterEncoding("UTF-8");
+        try {
+            PrintWriter out = response.getWriter();
+            int page = 0;
+            Slice<Todo> todoPage;
+            do {
+                todoPage = todoRepository.findAllBy(PageRequest.of(page, PAGE_SIZE));
+                for (Todo todo : todoPage) {
+                    String line = todoToCSV(todo);
+                    out.write(line);
+                    out.write("\n");
+                }
+                entityManager.clear();
+                page++;
+            } while (todoPage.hasNext());
+            out.flush();
+        } catch (IOException e) {
+            log.info("Exception occurred " + e.getMessage(), e);
+            throw new RuntimeException("Exception occurred while exporting results", e);
+        }
+    }
+
+    private String todoToCSV(Todo todo) {
+        return String.join(",", "" + todo.getId(), "" + todo.getDateCreated(),
+                todo.getDescription(), "" + todo.isCompleted());
+    }
+
 }
