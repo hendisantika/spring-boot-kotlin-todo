@@ -5,7 +5,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,6 +27,11 @@ public class TodoController {
     private final TodoRepository todoRepository;
 
     @PersistenceContext
-    EntityManager entityManager;
+    private EntityManager entityManager;
 
+    @GetMapping("/")
+    public String todos(Model model) {
+        model.addAttribute("todos", todoRepository.findAll(new PageRequest(0, 50)).getContent());
+        return "todos";
+    }
 }
