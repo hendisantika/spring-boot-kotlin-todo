@@ -1,6 +1,6 @@
 package id.my.hendisantika.springbootkotlintodo.util;
 
-import org.hibernate.internal.EmptyInterceptor;
+import org.hibernate.EmptyInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,5 +30,15 @@ public class HibernateStatisticsInterceptor extends EmptyInterceptor {
 
     public void clearCounter() {
         queryCount.remove();
+    }
+
+    @Override
+    public String onPrepareStatement(String sql) {
+        Long count = queryCount.get();
+        if (count != null) {
+            queryCount.set(count + 1);
+        }
+        //log.info(sql);
+        return super.onPrepareStatement(sql);
     }
 }
