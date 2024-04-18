@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * Created by IntelliJ IDEA.
@@ -34,4 +35,11 @@ public class TodoController {
         model.addAttribute("todos", todoRepository.findAll(new PageRequest(0, 50)).getContent());
         return "todos";
     }
+
+    @GetMapping(value = "/todos/{id}/delete")
+    public String deleteTodo(@PathVariable("id") Long id) {
+        todoRepository.deleteById(id);
+        return "redirect:/";
+    }
+
 }
