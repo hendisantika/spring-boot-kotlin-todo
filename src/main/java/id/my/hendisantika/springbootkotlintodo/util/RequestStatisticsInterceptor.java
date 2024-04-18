@@ -48,4 +48,11 @@ public class RequestStatisticsInterceptor implements AsyncHandlerInterceptor {
         time.remove();
         log.info("[Time: {} ms] [Queries: {}] {} {}", duration, queryCount, request.getMethod(), request.getRequestURI());
     }
+
+    @Override
+    public void afterConcurrentHandlingStarted(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        //concurrent handling cannot be supported here
+        statisticsInterceptor.clearCounter();
+        time.remove();
+    }
 }
