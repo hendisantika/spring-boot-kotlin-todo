@@ -4,6 +4,9 @@ import id.my.hendisantika.springbootkotlintodo.model.Todo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
@@ -42,4 +45,34 @@ public class TodoGenerator {
         todo.setCompleted(false);
         return todo;
     }
+
+    public static void createRandomTodoInserts(OutputStream out, int amount) {
+        final int singleStatementLimit = 1000;
+        final String insert = "INSERT INTO todo (completed, date_created, description) VALUES ";
+        OutputStreamWriter w = new OutputStreamWriter(out);
+        try {
+            w.write(insert);
+            for (int i = 1; i <= amount; i++) {
+                Todo todo = randomTodo();
+                w.write(String.format("(0,'%s','%s')", fmt.format(todo.getDateCreated()),
+                        todo.getDescription().replace("'", "\\'")));
+                if (i != amount) {
+                    if (i % singleStatementLimit == 0) {
+                        w.write(";\n\n");
+                        w.write(insert);
+                    } else {
+                        w.write(",\n");
+                    }
+                } else {
+                    w.write(";");
+                }
+            }
+            w.flush();
+            out.flush();
+            w.close();
+        } catch (IOException e) {
+            log.debug("Exception happened while creating data script.", e);
+        }
+    }
+
 }
