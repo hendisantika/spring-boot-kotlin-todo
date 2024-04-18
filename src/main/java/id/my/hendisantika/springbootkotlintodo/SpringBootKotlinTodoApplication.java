@@ -1,5 +1,6 @@
 package id.my.hendisantika.springbootkotlintodo;
 
+import id.my.hendisantika.springbootkotlintodo.util.HibernateStatisticsInterceptor;
 import org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -36,5 +37,10 @@ public class SpringBootKotlinTodoApplication {
         jpaProperties.put("hibernate.ejb.interceptor", hibernateInterceptor());
         return factory.dataSource(dataSource).packages("io.github.knes1.todo.model")
                 .properties(jpaProperties).build();
+    }
+
+    @Bean
+    public HibernateStatisticsInterceptor hibernateInterceptor() {
+        return new HibernateStatisticsInterceptor();
     }
 }
