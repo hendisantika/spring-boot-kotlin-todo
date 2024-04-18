@@ -6,8 +6,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Controller;
@@ -44,7 +46,7 @@ public class TodoController {
 
     @GetMapping("/")
     public String todos(Model model) {
-        model.addAttribute("todos", todoRepository.findAll(new PageRequest(0, 50)).getContent());
+        model.addAttribute("todos", todoRepository.findAll(PageRequest.of(0, 50)).getContent());
         return "todos";
     }
 
@@ -120,4 +122,29 @@ public class TodoController {
                 todo.getDescription(), "" + todo.isCompleted());
     }
 
+    /**
+     * TO DO DTO TO DO DTO
+     * TRANSFERS DATA FROM YOU TO TODO
+     * WHEN YOU CALL TO TODO
+     * <p>
+     * SHOOBIE DOOBIE YEAAA!
+     */
+    protected static class TodoDto {
+
+        @NotEmpty
+        @Length(min = 1, max = 100)
+        private String description;
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public Todo toTodo() {
+            return new Todo(description);
+        }
+    }
 }
