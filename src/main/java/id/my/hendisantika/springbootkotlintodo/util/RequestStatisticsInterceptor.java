@@ -1,5 +1,7 @@
 package id.my.hendisantika.springbootkotlintodo.util;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,4 +23,11 @@ public class RequestStatisticsInterceptor implements AsyncHandlerInterceptor {
     private final ThreadLocal<Long> time = new ThreadLocal<>();
     @Autowired
     private HibernateStatisticsInterceptor statisticsInterceptor;
+
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        time.set(System.currentTimeMillis());
+        statisticsInterceptor.startCounter();
+        return true;
+    }
 }
