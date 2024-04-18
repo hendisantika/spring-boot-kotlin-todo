@@ -28,4 +28,7 @@ public class HibernateStatisticsInterceptor extends EmptyInterceptor {
         return queryCount.get();
     }
 
+    public void clearCounter() {
+        queryCount.remove();
+    }
 }
