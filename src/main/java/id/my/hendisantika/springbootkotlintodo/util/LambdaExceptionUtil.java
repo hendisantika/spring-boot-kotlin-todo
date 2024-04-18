@@ -1,6 +1,7 @@
 package id.my.hendisantika.springbootkotlintodo.util;
 
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * Created by IntelliJ IDEA.
@@ -32,6 +33,20 @@ public final class LambdaExceptionUtil {
                 consumer.accept(t);
             } catch (Exception exception) {
                 throwActualException(exception);
+            }
+        };
+    }
+
+    /**
+     * .map(rethrowFunction(name -> Class.forName(name))) or .map(rethrowFunction(Class::forName))
+     */
+    public static <T, R, E extends Exception> Function<T, R> rethrowFunction(Function_WithExceptions<T, R, E> function) throws E {
+        return t -> {
+            try {
+                return function.apply(t);
+            } catch (Exception exception) {
+                throwActualException(exception);
+                return null;
             }
         };
     }
