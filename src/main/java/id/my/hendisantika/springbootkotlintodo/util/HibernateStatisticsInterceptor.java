@@ -19,4 +19,8 @@ public class HibernateStatisticsInterceptor extends EmptyInterceptor {
     private static final Logger log = LoggerFactory.getLogger(HibernateStatisticsInterceptor.class);
 
     private final ThreadLocal<Long> queryCount = new ThreadLocal<>();
+
+    public void startCounter() {
+        queryCount.set(0L);
+    }
 }
